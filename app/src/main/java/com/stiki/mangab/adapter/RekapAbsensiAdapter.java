@@ -4,7 +4,8 @@ import android.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.stiki.mangab.R;
@@ -18,8 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 public class RekapAbsensiAdapter extends RecyclerView.Adapter<RekapAbsensiAdapter.RekapAbsensiVH> {
 
     public interface RekapAbsensiListener{
-        void onIzinMhs(DetailAbsenResponse.MhsData data);
+        void onIjinMhs(DetailAbsenResponse.MhsData data);
         void onSakitMhs(DetailAbsenResponse.MhsData data);
+        void onHadirMhs(DetailAbsenResponse.MhsData data);
+        void onAlpaMhs(DetailAbsenResponse.MhsData data);
     }
 
     private List<DetailAbsenResponse.MhsData> listMhs;
@@ -41,40 +44,43 @@ public class RekapAbsensiAdapter extends RecyclerView.Adapter<RekapAbsensiAdapte
     public void onBindViewHolder(@NonNull RekapAbsensiVH holder, int position) {
         holder.tvNrp.setText(listMhs.get(position).nrp);
         holder.tvName.setText(listMhs.get(position).nama);
-        holder.tvStatus.setText("( Alpa )");
 
-        if(listMhs.get(position).statusAbsen == 2){
-            holder.tvStatus.setText("( Izin )");
+        if (listMhs.get(position).statusAbsen == 0) {
+            holder.rbAlpa.setChecked(true);
+        } else if (listMhs.get(position).statusAbsen == 1) {
+            holder.rbHadir.setChecked(true);
+        } else if(listMhs.get(position).statusAbsen == 2){
+            holder.rbIjin.setChecked(true);
         }else if(listMhs.get(position).statusAbsen == 3){
-            holder.tvStatus.setText("( Sakit )");
+            holder.rbSakit.setChecked(true);
         }
 
-        holder.btnIzin.setOnClickListener(v -> {
-            AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
-            alertDialog.setMessage("Change attendance to \"Izin\"?");
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
-                    (dialog, which) -> {
-                        listMhs.get(position).statusAbsen = 2;
+        holder.rgStatus.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rbHadir:
+                        listMhs.get(position).statusAbsen = 1;
                         notifyDataSetChanged();
-                        listener.onIzinMhs(listMhs.get(position));
-                    });
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
-                    (dialog, which) -> dialog.dismiss());
-            alertDialog.show();
-        });
-
-        holder.btnSakit.setOnClickListener(v -> {
-            AlertDialog alertDialog = new AlertDialog.Builder(v.getContext()).create();
-            alertDialog.setMessage("Change attendance to \"Sakit\"?");
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Yes",
-                    (dialog, which) -> {
+                        listener.onHadirMhs(listMhs.get(position));
+                        break;
+                    case R.id.rbSakit:
                         listMhs.get(position).statusAbsen = 3;
                         notifyDataSetChanged();
                         listener.onSakitMhs(listMhs.get(position));
-                    });
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No",
-                    (dialog, which) -> dialog.dismiss());
-            alertDialog.show();
+                        break;
+                    case R.id.rbIjin:
+                        listMhs.get(position).statusAbsen = 2;
+                        listener.onIjinMhs(listMhs.get(position));
+                        notifyDataSetChanged();
+                        break;
+                    case R.id.rbAlpa:
+                        listMhs.get(position).statusAbsen = 0;
+                        notifyDataSetChanged();
+                        listener.onAlpaMhs(listMhs.get(position));
+                        break;
+                }
+            }
         });
     }
 
@@ -84,15 +90,18 @@ public class RekapAbsensiAdapter extends RecyclerView.Adapter<RekapAbsensiAdapte
     }
 
     class RekapAbsensiVH extends RecyclerView.ViewHolder{
-        TextView tvNrp, tvName, tvStatus;
-        Button btnIzin, btnSakit;
+        TextView tvNrp, tvName;
+        RadioGroup rgStatus;
+        RadioButton rbHadir, rbSakit, rbIjin, rbAlpa;
         RekapAbsensiVH(@NonNull View itemView) {
             super(itemView);
             tvNrp = itemView.findViewById(R.id.tvNRP);
             tvName = itemView.findViewById(R.id.tvName);
-            tvStatus = itemView.findViewById(R.id.tvStatus);
-            btnIzin = itemView.findViewById(R.id.btnIzin);
-            btnSakit = itemView.findViewById(R.id.btnSakit);
+            rgStatus = itemView.findViewById(R.id.rgStatus);
+            rbAlpa = itemView.findViewById(R.id.rbAlpa);
+            rbHadir = itemView.findViewById(R.id.rbHadir);
+            rbIjin = itemView.findViewById(R.id.rbIjin);
+            rbSakit = itemView.findViewById(R.id.rbSakit);
         }
     }
 }

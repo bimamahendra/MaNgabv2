@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,8 +12,10 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayout;
 import com.stiki.mangab.R;
 import com.stiki.mangab.adapter.HistoryAbsensiAdapter;
+import com.stiki.mangab.adapter.HistoryPagerAdapter;
 import com.stiki.mangab.api.Api;
 import com.stiki.mangab.api.ApiClient;
 import com.stiki.mangab.api.response.HistoryAbsensiResponse;
@@ -28,63 +31,27 @@ import retrofit2.Response;
 
 public class HistoryActivity extends AppCompatActivity {
 
-    private Api api;
-    private User user;
-
-    private RecyclerView rvHistory;
-    private SwipeRefreshLayout srlHistory;
+    private TabLayout tlHistory;
+    private ViewPager vpHistory;
+    private HistoryPagerAdapter historyPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
 
-        api = ApiClient.getClient();
-        user = AppPreference.getUser(this);
+        tlHistory = findViewById(R.id.tlHistory);
+        vpHistory = findViewById(R.id.vpHistory);
 
-        rvHistory = findViewById(R.id.rvHistory);
-        srlHistory = findViewById(R.id.srlHistory);
+        tlHistory.addTab(tlHistory.newTab().setText("Recent"));
+        tlHistory.addTab(tlHistory.newTab().setText("Summary"));
+        tlHistory.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        getHistory();
+        historyPagerAdapter = new HistoryPagerAdapter(getSupportFragmentManager(), tlHistory.getTabCount());
 
-        srlHistory.setOnRefreshListener(() -> {
-            Handler handler = new Handler();
-            handler.postDelayed(() -> {
-                getHistory();
-                srlHistory.setRefreshing(false);
-            }, 2500);
-        });
-    }
+        vpHistory.setAdapter(historyPagerAdapter);
 
-    public void getHistory() {
-        api.historyAbsensiDosen(user.noInduk).enqueue(new Callback<HistoryAbsensiResponse>() {
-            @Override
-            public void onResponse(Call<HistoryAbsensiResponse> call, Response<HistoryAbsensiResponse> response) {
-                if (response.code() == 200) {
-                    if (!response.body().error) {
-                        setRecyclerView(response.body().data);
-                    }else {
-                        Toast.makeText(HistoryActivity.this, response.body().message,
-                                Toast.LENGTH_SHORT).show();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<HistoryAbsensiResponse> call, Throwable t) {
-                if(t instanceof UnknownHostException){
-                    Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-                }else {
-                    t.printStackTrace();
-                }
-                Log.e("getHistory", t.getMessage());
-            }
-        });
-    }
-
-    public void setRecyclerView(List<HistoryAbsensiResponse.HistoryAbsensiData> list) {
-        rvHistory.setLayoutManager(new LinearLayoutManager(this));
-        rvHistory.setAdapter(new HistoryAbsensiAdapter(list));
+        tlHistory.setupWithViewPager(vpHistory);
     }
 
     @Override

@@ -4,17 +4,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.viewpager.widget.ViewPager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
+import com.google.android.material.tabs.TabLayout;
 import com.stiki.mangab.R;
 import com.stiki.mangab.adapter.HistoryMhsAdapter;
+import com.stiki.mangab.adapter.HistoryPagerAdapter;
 import com.stiki.mangab.api.Api;
 import com.stiki.mangab.api.ApiClient;
 import com.stiki.mangab.api.response.HistoryAbsensiMhsResponse;
@@ -24,54 +28,34 @@ import com.stiki.mangab.preference.AppPreference;
 import java.net.UnknownHostException;
 
 public class HistoryMhsActivity extends AppCompatActivity {
-    private Api api = ApiClient.getClient();
-    private User user;
 
-    private RecyclerView rvHistory;
-    private SwipeRefreshLayout srlHistory;
+    private TabLayout tlHistory;
+    private ViewPager vpHistory;
+    private HistoryPagerAdapter historyPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_mhs);
 
-        user = AppPreference.getUser(this);
+        tlHistory = findViewById(R.id.tlHistory);
+        vpHistory = findViewById(R.id.vpHistory);
 
-        rvHistory = findViewById(R.id.rvHistory);
-        srlHistory = findViewById(R.id.srlHistory);
+        tlHistory.addTab(tlHistory.newTab().setText("Recent"));
+        tlHistory.addTab(tlHistory.newTab().setText("Summary"));
+        tlHistory.setTabGravity(TabLayout.GRAVITY_FILL);
 
-        rvHistory.setLayoutManager(new LinearLayoutManager(this));
+        historyPagerAdapter = new HistoryPagerAdapter(getSupportFragmentManager(), tlHistory.getTabCount());
 
-        getHistory();
+        vpHistory.setAdapter(historyPagerAdapter);
 
-        srlHistory.setOnRefreshListener(() -> {
-            Handler handler = new Handler();
-            handler.postDelayed(() -> {
-                getHistory();
-                srlHistory.setRefreshing(false);
-            }, 2500);
-        });
+        tlHistory.setupWithViewPager(vpHistory);
     }
 
-    public void getHistory() {
-        api.historyAbsensiMhs(user.noInduk).enqueue(new Callback<HistoryAbsensiMhsResponse>() {
-            @Override
-            public void onResponse(Call<HistoryAbsensiMhsResponse> call, Response<HistoryAbsensiMhsResponse> response) {
-                if(!response.body().error){
-                    rvHistory.setAdapter(new HistoryMhsAdapter(response.body().data));
-                }else {
-                    Toast.makeText(HistoryMhsActivity.this, response.body().message, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<HistoryAbsensiMhsResponse> call, Throwable t) {
-                if(t instanceof UnknownHostException){
-                    Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-                }else {
-                    t.printStackTrace();
-                }
-            }
-        });
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

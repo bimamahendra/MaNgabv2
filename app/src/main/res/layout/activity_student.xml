@@ -1,135 +1,152 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".activity.MainActivity"
     android:fitsSystemWindows="true"
-    tools:context=".activity.MainActivity">
+    android:background="@android:color/white">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/colorPrimary">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:id="@+id/toolbar_title"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/app_name"
-                android:gravity="center"
-                android:textColor="@android:color/white"
-                android:layout_alignParentStart="true"
-                android:fontFamily="@font/montserrat_bold"
-                />
-
-            <ImageView
-                android:id="@+id/toolbar_button"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:src="@drawable/ic_info_black_24dp"
-                style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_alignParentEnd="true"
-                />
-
-        </RelativeLayout>
-    </androidx.appcompat.widget.Toolbar>
-
-    <LinearLayout
+    <FrameLayout
         android:id="@+id/top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorBlue"
-        android:orientation="vertical"
-        android:paddingLeft="20dp"
-        android:paddingBottom="20dp"
-        android:paddingRight="20dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <TextView
-            android:id="@+id/tvCurrentDate"
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            app:srcCompat="@drawable/image_top_main" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@color/colorPrimary"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tvName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:text="Nanda Bima Mahendra"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:id="@+id/tvNoInduk"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="182197368624"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@android:color/white" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="left"
+            android:padding="16dp">
+
+            <TextView
+                android:id="@+id/tvCurrentDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:fontFamily="@font/montserrat_semibold"
+                android:text="Monday,\nFeb 3, 2020"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:fontFamily="@font/montserrat_semibold"
-            android:text="November 12, 2019"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:textColor="@android:color/white" />
+            android:orientation="vertical"
+            android:padding="10dp">
 
-        <TextView
-            android:id="@+id/tvName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_bold"
-            android:text="Nanda Bima Mahendra,"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@android:color/white" />
+            <Button
+                android:id="@+id/btnLogout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logout"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center"
+                android:drawablePadding="10dp"
+                android:drawableEnd="@drawable/ic_logout"
+                android:backgroundTint="#00FFFFFF"/>
 
-        <TextView
-            android:id="@+id/tvNoInduk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserrat_semibold"
-            android:text="182197368624"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@android:color/white" />
-    </LinearLayout>
+        </LinearLayout>
+
+    </FrameLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
         android:clipToPadding="false"
         android:gravity="center_horizontal"
         android:orientation="vertical"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/top"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/top">
+        android:layout_height="0dp">
 
         <androidx.cardview.widget.CardView
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
             android:id="@+id/cvScan"
-            CardView_cardCornerRadius="40dp"
             android:layout_width="200dp"
             android:layout_height="0dp"
-            android:layout_margin="10dp"
             android:layout_weight="0.8"
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground">
+            android:layout_margin="10dp"
+            CardView_cardCornerRadius="40dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
-
+                android:orientation="vertical"
+                android:gravity="center">
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:src="@drawable/icon_scan" />
-
-                <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="@font/montserrat_semibold"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/image_scan_qrcode"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
                     android:text="Scan QR Code"
-                    android:textStyle="bold" />
-
+                    android:gravity="center"
+                    android:background="@drawable/btn_round"
+                    android:textColor="@android:color/white"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:padding="7.5dp"
+                    android:fontFamily="@font/montserrat_semibold"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_light"
                     android:gravity="center"
-                    android:padding="5dp"
                     android:text="Make Class Attendance"
-                    android:textColor="@android:color/darker_gray" />
+                    android:padding="5dp"
+                    android:fontFamily="@font/montserrat_light"
+                    android:textColor="@android:color/darker_gray"/>
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -152,17 +169,24 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:src="@drawable/icon_generate" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/image_menu_dosen" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="@font/montserrat_semibold"
+                    android:textStyle="bold"
                     android:text="Generate QR Code"
-                    android:textStyle="bold" />
+                    android:gravity="center"
+                    android:background="@drawable/btn_round"
+                    android:textColor="@android:color/white"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:padding="7.5dp"
+                    android:fontFamily="@font/montserrat_semibold"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -177,56 +201,48 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
-            android:id="@+id/cvHistory"
-            CardView_cardCornerRadius="40dp"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:clickable="true"
             android:layout_width="200dp"
             android:layout_height="0dp"
-            android:layout_margin="10dp"
             android:layout_weight="0.8"
-            android:clickable="true"
-            android:foreground="?android:attr/selectableItemBackground">
-
+            android:layout_margin="10dp"
+            CardView_cardCornerRadius="40dp"
+            android:id="@+id/cvHistory">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:orientation="vertical">
-
+                android:orientation="vertical"
+                android:gravity="center">
                 <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:src="@drawable/icon_historyy" />
-
-                <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="@font/montserrat_semibold"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/image_history"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
                     android:text="History"
-                    android:textStyle="bold" />
-
+                    android:gravity="center"
+                    android:background="@drawable/btn_round"
+                    android:textColor="@android:color/white"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:padding="7.5dp"
+                    android:fontFamily="@font/montserrat_semibold"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/montserrat_light"
                     android:gravity="center"
-                    android:padding="5dp"
                     android:text="Show Attendace History"
-                    android:textColor="@android:color/darker_gray" />
+                    android:padding="5dp"
+                    android:fontFamily="@font/montserrat_light"
+                    android:textColor="@android:color/darker_gray"/>
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/btn_round"
-            android:fontFamily="@font/montserrat_bold"
-            android:text="Logout"
-            android:textAllCaps="false"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="#FFF" />
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

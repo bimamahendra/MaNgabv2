@@ -34,6 +34,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ScanActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler{
+    private Button btnEnterCode;
+
     private Api api = ApiClient.getClient();
     private User user;
 
@@ -52,8 +54,15 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
         frameLayoutCamera = findViewById(R.id.frame_layout_camera);
         guideline = findViewById(R.id.guideline);
+        btnEnterCode = findViewById(R.id.btnEnterCode);
         initScannerView();
 
+        btnEnterCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ScanActivity.this, EnterCodeActivity.class));
+            }
+        });
     }
 
     private void initScannerView() {

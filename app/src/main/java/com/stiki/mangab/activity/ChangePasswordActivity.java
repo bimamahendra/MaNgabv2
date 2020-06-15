@@ -49,9 +49,7 @@ public class ChangePasswordActivity extends AppCompatActivity {
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                 if(!etPasswordNew.getText().toString().equals(etPasswordConfirm.getText().toString())){
                     Toast.makeText(ChangePasswordActivity.this, "Confirm password is not same", Toast.LENGTH_SHORT).show();
-                }else if(etPasswordNew.getText().toString().equals("") || etPasswordConfirm.getText().toString().equals("")){
-                    Toast.makeText(ChangePasswordActivity.this, "Please fill your new password", Toast.LENGTH_SHORT).show();
-                }else{
+                }else {
                     if (!response.body().error) {
                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     } else {

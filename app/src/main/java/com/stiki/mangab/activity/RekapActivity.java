@@ -93,7 +93,7 @@ public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdap
     }
 
     @Override
-    public void onIzinMhs(DetailAbsenResponse.MhsData data) {
+    public void onIjinMhs(DetailAbsenResponse.MhsData data) {
         api.absenMhs(qrCode, data.nrp, "2").enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
@@ -118,6 +118,46 @@ public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdap
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                 Log.e("Sakit", "Sukses");
+//                Toast.makeText(RekapActivity.this, response.body().message, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                if(t instanceof UnknownHostException){
+                    Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+                }else {
+                    t.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onHadirMhs(DetailAbsenResponse.MhsData data) {
+        api.absenMhs(qrCode, data.nrp, "1").enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                Log.e("Hadir", "Sukses");
+//                Toast.makeText(RekapActivity.this, response.body().message, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                if(t instanceof UnknownHostException){
+                    Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+                }else {
+                    t.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onAlpaMhs(DetailAbsenResponse.MhsData data) {
+        api.absenMhs(qrCode, data.nrp, "0").enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                Log.e("Alpa", "Sukses");
 //                Toast.makeText(RekapActivity.this, response.body().message, Toast.LENGTH_SHORT).show();
             }
 

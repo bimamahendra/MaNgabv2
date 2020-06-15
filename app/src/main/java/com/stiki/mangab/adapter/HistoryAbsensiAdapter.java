@@ -32,6 +32,7 @@ public class HistoryAbsensiAdapter extends RecyclerView.Adapter<HistoryAbsensiAd
     public void onBindViewHolder(@NonNull HistoriAbsensiVH holder, int position) {
         holder.tvMataKuliahClass.setText(dataHistory.get(position).namaMatkul + " | " + dataHistory.get(position).kelasMatkul);
         holder.tvClassDateTime.setText(dataHistory.get(position).ruanganMatkul + ", " + dataHistory.get(position).jadwalKelas);
+        holder.tvRoom.setText(dataHistory.get(position).ruanganMatkul);
         holder.tvTopik.setText(dataHistory.get(position).topikMatkul);
     }
 
@@ -42,13 +43,14 @@ public class HistoryAbsensiAdapter extends RecyclerView.Adapter<HistoryAbsensiAd
 
     public class HistoriAbsensiVH extends RecyclerView.ViewHolder {
 
-        TextView tvMataKuliahClass, tvClassDateTime, tvTopik;
+        TextView tvMataKuliahClass, tvClassDateTime, tvTopik, tvRoom;
 
         public HistoriAbsensiVH(@NonNull View itemView) {
             super(itemView);
             tvMataKuliahClass = itemView.findViewById(R.id.tvMataKuliahClass);
             tvClassDateTime = itemView.findViewById(R.id.tvClassDateTime);
             tvTopik = itemView.findViewById(R.id.tvTopik);
+            tvRoom = itemView.findViewById(R.id.tvRoom);
         }
 
     }

@@ -10,7 +10,8 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorBlue">
+        android:background="@color/colorBlue"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -25,15 +26,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
-
+        android:layout_weight="1">
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="1" />
+            app:layout_constraintGuide_end="0dp" />
 
         <FrameLayout
             android:id="@+id/frame_layout_camera"
@@ -43,6 +43,26 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/image_enter_code"
+        android:padding="25dp">
+
+        <Button
+            android:id="@+id/btnEnterCode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Enter Code"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:fontFamily="@font/montserrat_bold"
+            android:gravity="center"
+            android:backgroundTint="@color/colorAccent"/>
+
+    </FrameLayout>
 
 </LinearLayout>

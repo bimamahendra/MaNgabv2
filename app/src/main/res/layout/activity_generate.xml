@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="activity.GenerateActivity"
+    android:padding="16dp"
+    android:background="@android:color/white"
     android:orientation="vertical">
 
     <LinearLayout
@@ -12,7 +14,8 @@
         android:layout_height="?attr/actionBarSize"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="@color/colorBlue">
+        android:background="@color/colorBlue"
+        android:visibility="gone">
         <TextView
             android:textColor="@android:color/white"
             android:layout_width="wrap_content"
@@ -21,120 +24,143 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:fontFamily="@font/montserrat_semibold"/>
     </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:orientation="vertical"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:background="@android:color/white">
+                android:orientation="vertical">
+
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/icon_generate"/>
+                    android:layout_height="200dp"
+                    android:layout_marginBottom="10dp"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/image_menu_dosen" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:gravity="center"
+                    android:text="Generate Attendance QR Code"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="@color/colorPrimary" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@android:color/white"
                 android:padding="16dp">
 
                 <TextView
-                    android:layout_marginTop="5dp"
-                    android:text="Lecturer"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:textColor="@android:color/black"
-                    android:id="@+id/tvDosenName"
-                    android:text="Pak Ganteng"
-                    android:fontFamily="@font/montserrat_semibold"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"/>
-                <TextView
                     android:layout_marginTop="5dp"
-                    android:text="Date"
                     android:fontFamily="@font/montserrat_semibold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <TextView
-                    android:textColor="@android:color/black"
-                    android:id="@+id/tvDate"
-                    android:text="12 Desember 2019"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="15dp"/>
+                    android:text="Lecturer" />
 
                 <TextView
-                    android:layout_marginTop="5dp"
-                    android:text="Subject"
-                    android:fontFamily="@font/montserrat_semibold"
+                    android:id="@+id/tvDosenName"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Pak Ganteng"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Date" />
+
+                <TextView
+                    android:id="@+id/tvDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="12 Desember 2019"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Subject" />
+
                 <Spinner
                     android:id="@+id/spSubject"
-                    android:drawablePadding="20dp"
-                    android:fontFamily="@font/montserrat_semibold"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    />
+                    android:drawablePadding="20dp"
+                    android:fontFamily="@font/montserrat_semibold" />
+
                 <TextView
-                    android:layout_marginTop="5dp"
-                    android:text="Class"
-                    android:fontFamily="@font/montserrat_semibold"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Class" />
+
                 <Spinner
                     android:id="@+id/spClass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:drawablePadding="20dp"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:fontFamily="@font/montserrat_semibold" />
 
                 <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
+                    android:fontFamily="@font/montserrat_semibold"
                     android:text="Room"
-                    android:fontFamily="@font/montserrat_semibold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:visibility="gone" />
+
                 <EditText
+                    android:id="@+id/etRoom"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/etRoom"/>
+                    android:visibility="gone" />
 
                 <TextView
-                    android:layout_marginTop="5dp"
-                    android:text="Topic"
-                    android:fontFamily="@font/montserrat_semibold"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-                <EditText
-                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/etTopic"/>
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/montserrat_semibold"
+                    android:text="Topic" />
+
+                <EditText
+                    android:id="@+id/etTopic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
                 <Button
                     android:id="@+id/btnGenerate"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                    android:textColor="#FFF"
-                    android:background="@drawable/btn_round"
-                    android:layout_marginTop="20dp"
-                    android:textAllCaps="false"
-                    android:text="Generate"
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/btn_round"
                     android:fontFamily="@font/montserrat_bold"
-                    android:layout_height="wrap_content" />
+                    android:text="Generate"
+                    android:textAllCaps="false"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:textColor="#FFF" />
 
 
             </LinearLayout>
