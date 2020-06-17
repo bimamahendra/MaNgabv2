@@ -40,7 +40,7 @@ public interface Api {
     @FormUrlEncoded
     Call<MyClassResponse> myClass(@Field("kode_matkul") String kodeMatkul);
 
-    @POST("absen/generate")
+    @POST("Absen/generate")
     @FormUrlEncoded
     Call<GenerateQrCodeResponse> generateQrCode(@Field("id_matkul") String idMatkul,
                                                 @Field("topik") String topik,
