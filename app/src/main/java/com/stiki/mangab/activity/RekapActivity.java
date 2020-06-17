@@ -1,13 +1,8 @@
 package com.stiki.mangab.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +10,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.stiki.mangab.R;
 import com.stiki.mangab.adapter.RekapAbsensiAdapter;
 import com.stiki.mangab.api.Api;
@@ -24,8 +26,10 @@ import com.stiki.mangab.api.response.DetailAbsenResponse;
 
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdapter.RekapAbsensiListener {
 
@@ -35,7 +39,7 @@ public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdap
     private RecyclerView rvRekap;
     private Button btnRekap;
     private EditText etNote;
-    
+
     private ArrayList<DetailAbsenResponse.MhsData> filteredList = new ArrayList<>();
 
     @Override
@@ -46,8 +50,8 @@ public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdap
         ArrayList<DetailAbsenResponse.MhsData> list = (ArrayList) getIntent()
                 .getSerializableExtra("absen");
 
-        for(int i=0;i<list.size();i++){
-            if(list.get(i).statusAbsen == 0){
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).statusAbsen == 0) {
                 filteredList.add(list.get(i));
             }
         }
@@ -68,12 +72,12 @@ public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdap
                 api.rekap(qrCode, etNote.getText().toString()).enqueue(new Callback<BaseResponse>() {
                     @Override
                     public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                        if(!response.body().error){
+                        if (!response.body().error) {
                             Toast.makeText(RekapActivity.this, response.body().message, Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(getApplicationContext(), HistoryActivity.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
-                        }else {
+                        } else {
                             Toast.makeText(RekapActivity.this, response.body().message,
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -81,9 +85,9 @@ public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdap
 
                     @Override
                     public void onFailure(Call<BaseResponse> call, Throwable t) {
-                        if(t instanceof UnknownHostException){
+                        if (t instanceof UnknownHostException) {
                             Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
                             t.printStackTrace();
                         }
                     }
@@ -94,7 +98,7 @@ public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdap
 
     @Override
     public void onIjinMhs(DetailAbsenResponse.MhsData data) {
-        api.absenMhs(qrCode, data.nrp, "2").enqueue(new Callback<BaseResponse>() {
+        api.absenMhs(qrCode, data.nrp, "2", 0, 0).enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                 Log.e("Izin", "Sukses");
@@ -103,9 +107,9 @@ public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdap
 
             @Override
             public void onFailure(Call<BaseResponse> call, Throwable t) {
-                if(t instanceof UnknownHostException){
+                if (t instanceof UnknownHostException) {
                     Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     t.printStackTrace();
                 }
             }
@@ -114,7 +118,7 @@ public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdap
 
     @Override
     public void onSakitMhs(DetailAbsenResponse.MhsData data) {
-        api.absenMhs(qrCode, data.nrp, "3").enqueue(new Callback<BaseResponse>() {
+        api.absenMhs(qrCode, data.nrp, "3", 0, 0).enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                 Log.e("Sakit", "Sukses");
@@ -123,38 +127,51 @@ public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdap
 
             @Override
             public void onFailure(Call<BaseResponse> call, Throwable t) {
-                if(t instanceof UnknownHostException){
+                if (t instanceof UnknownHostException) {
                     Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     t.printStackTrace();
                 }
             }
         });
     }
 
+
+    @SuppressLint("MissingPermission")
     @Override
     public void onHadirMhs(DetailAbsenResponse.MhsData data) {
-        api.absenMhs(qrCode, data.nrp, "1").enqueue(new Callback<BaseResponse>() {
+        FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
+        mFusedLocation.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
             @Override
-            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                Log.e("Hadir", "Sukses");
+            public void onSuccess(Location location) {
+                if (location != null) {
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+                    api.absenMhs(qrCode, data.nrp, "1", latitude, longitude).enqueue(new Callback<BaseResponse>() {
+                        @Override
+                        public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                            Log.e("Hadir", "Sukses");
 //                Toast.makeText(RekapActivity.this, response.body().message, Toast.LENGTH_SHORT).show();
-            }
+                        }
 
-            @Override
-            public void onFailure(Call<BaseResponse> call, Throwable t) {
-                if(t instanceof UnknownHostException){
-                    Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-                }else {
-                    t.printStackTrace();
+                        @Override
+                        public void onFailure(Call<BaseResponse> call, Throwable t) {
+                            if (t instanceof UnknownHostException) {
+                                Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+                            } else {
+                                t.printStackTrace();
+                            }
+                        }
+                    });
                 }
             }
         });
+
     }
 
     @Override
     public void onAlpaMhs(DetailAbsenResponse.MhsData data) {
-        api.absenMhs(qrCode, data.nrp, "0").enqueue(new Callback<BaseResponse>() {
+        api.absenMhs(qrCode, data.nrp, "0", 0, 0).enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                 Log.e("Alpa", "Sukses");
@@ -163,9 +180,9 @@ public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdap
 
             @Override
             public void onFailure(Call<BaseResponse> call, Throwable t) {
-                if(t instanceof UnknownHostException){
+                if (t instanceof UnknownHostException) {
                     Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     t.printStackTrace();
                 }
             }

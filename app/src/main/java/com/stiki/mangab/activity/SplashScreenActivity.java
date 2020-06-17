@@ -55,6 +55,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         String[] PERMISSIONS = {
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.CAMERA,
+                Manifest.permission.ACCESS_FINE_LOCATION
         };
 
         if(!hasPermissions(PERMISSIONS)){
@@ -146,7 +147,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         switch (requestCode) {
             case 0: {
                 if(grantResults[0] != PackageManager.PERMISSION_GRANTED){
-                    Toast.makeText(this, "Izin diperlukan untuk membaca device id", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Izin diperlukan untuk membaca device id, kamera dan lokasi", Toast.LENGTH_SHORT).show();
                     finish();
                 }else {
                     checkStatusLogin();

@@ -2,9 +2,11 @@ package com.stiki.mangab.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Display;
@@ -15,10 +17,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.zxing.WriterException;
 import com.stiki.mangab.R;
 import com.stiki.mangab.api.Api;
@@ -45,16 +52,20 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
 
     Api api = ApiClient.getClient();
     User user;
+    MyClassResponse.MyClassData selectedClass;
 
     Button btnGenerate;
     TextView tvDosenName, tvDate;
     Spinner spSubject, spClass;
-    EditText etRoom, etTopic;
+    EditText etTopic;
     Bitmap bitmap;
     QRGEncoder qrgEncoder;
+    RadioGroup rgType;
+    RadioButton rbOffline, rbOnline;
 
     public static final String BitmapValue = "bitmap";
     public static final String GenerateResponse = "GenerateResponse";
+    private Integer type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,8 +78,10 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
         tvDate = findViewById(R.id.tvDate);
         spSubject = findViewById(R.id.spSubject);
         spClass = findViewById(R.id.spClass);
-        etRoom = findViewById(R.id.etRoom);
         etTopic = findViewById(R.id.etTopic);
+        rgType = findViewById(R.id.rgType);
+        rbOffline = findViewById(R.id.rbOffline);
+        rbOnline = findViewById(R.id.rbOnline);
 
         tvDosenName.setText(user.nama);
         tvDate.setText(new SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
@@ -125,15 +138,30 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
             }
         });
 
+        rgType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId){
+                    case R.id.rbOffline:
+                        type = 0;
+                        break;
+                    case R.id.rbOnline:
+                        type = 1;
+                        break;
+                }
+            }
+        });
+
+
         btnGenerate.setOnClickListener(this);
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onClick(View view) {
         if(view == btnGenerate){
-            MyClassResponse.MyClassData selectedClass =
-                    (MyClassResponse.MyClassData) spClass.getSelectedItem();
 
+            selectedClass=(MyClassResponse.MyClassData) spClass.getSelectedItem();
             if(selectedClass == null){
                 Toast.makeText(this, "Class didn't chosen yet", Toast.LENGTH_SHORT).show();
                 return;
@@ -144,53 +172,73 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
                 return;
             }
 
-            if(etRoom.getText().toString().equals("")){
-                Toast.makeText(this, "Room is empty", Toast.LENGTH_SHORT).show();
+
+            if (rgType.getCheckedRadioButtonId() == -1){
+                Toast.makeText(this, "Class type is empty", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            api.generateQrCode(selectedClass.idMatkul, etTopic.getText().toString(),
-                    etRoom.getText().toString()).enqueue(new Callback<GenerateQrCodeResponse>() {
+            FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
+            mFusedLocation.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
                 @Override
-                public void onResponse(Call<GenerateQrCodeResponse> call, Response<GenerateQrCodeResponse> response) {
-                    if(!response.body().error){
-                        WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
-                        Display display = manager.getDefaultDisplay();
-                        Point point = new Point();
-                        display.getSize(point);
-                        int width = point.x;
-                        int height = point.y;
-                        int smallerDimension = width < height ? width : height;
-                        smallerDimension = smallerDimension * 3 / 4;
-
-                        qrgEncoder = new QRGEncoder(response.body().qrCode, null, QRGContents.Type.TEXT, smallerDimension);
-
-                        try {
-                            bitmap = qrgEncoder.encodeAsBitmap();
-                            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                            bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                            byte[] byteArray = stream.toByteArray();
-                            Intent intent = new Intent(GenerateActivity.this, ResultActivity.class);
-                            intent.putExtra(BitmapValue, byteArray);
-                            intent.putExtra(GenerateResponse, response.body());
-                            startActivity(intent);
-                        } catch (WriterException e) {
-                            e.printStackTrace();
-                        }
-                    }else {
-                        Toast.makeText(GenerateActivity.this, response.body().message, Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<GenerateQrCodeResponse> call, Throwable t) {
-                    if(t instanceof UnknownHostException){
-                        Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-                    }else {
-                        t.printStackTrace();
+                public void onSuccess(Location location) {
+                    if (location != null){
+                        // Do it all with location
+                        Log.d("My Current location", "Lat : " + location.getLatitude() + " Long : " + location.getLongitude());
+                        double latitude= location.getLatitude();
+                        double longitude = location.getLongitude();
+                        generateQrCode(latitude, longitude);
                     }
                 }
             });
+
         }
+    }
+
+    private void generateQrCode(double latitude, double longitude){
+        Log.v("lati", String.valueOf(selectedClass.idMatkul)+etTopic.getText().toString()+type+latitude+longitude);
+        api.generateQrCode(selectedClass.idMatkul, etTopic.getText().toString(),
+                type, latitude, longitude).enqueue(new Callback<GenerateQrCodeResponse>() {
+            @Override
+            public void onResponse(Call<GenerateQrCodeResponse> call, Response<GenerateQrCodeResponse> response) {
+                if(!response.body().error){
+                    WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
+                    Display display = manager.getDefaultDisplay();
+                    Point point = new Point();
+                    display.getSize(point);
+                    int width = point.x;
+                    int height = point.y;
+                    int smallerDimension = width < height ? width : height;
+                    smallerDimension = smallerDimension * 3 / 4;
+
+                    qrgEncoder = new QRGEncoder(response.body().qrCode, null, QRGContents.Type.TEXT, smallerDimension);
+
+                    try {
+                        bitmap = qrgEncoder.encodeAsBitmap();
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                        byte[] byteArray = stream.toByteArray();
+                        Intent intent = new Intent(GenerateActivity.this, ResultActivity.class);
+                        intent.putExtra(BitmapValue, byteArray);
+                        intent.putExtra(GenerateResponse, response.body());
+                        startActivity(intent);
+                    } catch (WriterException e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    Toast.makeText(GenerateActivity.this, response.body().message, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<GenerateQrCodeResponse> call, Throwable t) {
+                if(t instanceof UnknownHostException){
+                    Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+                }else {
+                    t.printStackTrace();
+                }
+            }
+        });
+
     }
 }
