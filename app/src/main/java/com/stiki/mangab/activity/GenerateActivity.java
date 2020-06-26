@@ -42,8 +42,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-import androidmads.library.qrgenearator.QRGContents;
-import androidmads.library.qrgenearator.QRGEncoder;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -58,15 +56,12 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
     TextView tvDosenName, tvDate;
     Spinner spSubject, spClass;
     EditText etTopic;
-    Bitmap bitmap;
-    QRGEncoder qrgEncoder;
     RadioGroup rgType;
     RadioButton rbOffline, rbOnline;
 
-    public static final String BitmapValue = "bitmap";
     public static final String UrlImgValue = "urlimg";
     public static final String GenerateResponse = "GenerateResponse";
-    private String type;
+    private Integer type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,10 +139,10 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId){
                     case R.id.rbOffline:
-                        type = "0";
+                        type = 0;
                         break;
                     case R.id.rbOnline:
-                        type = "1";
+                        type = 1;
                         break;
                 }
             }
@@ -203,30 +198,6 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onResponse(Call<GenerateQrCodeResponse> call, Response<GenerateQrCodeResponse> response) {
                 if(!response.body().error){
-                    /*WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
-                    Display display = manager.getDefaultDisplay();
-                    Point point = new Point();
-                    display.getSize(point);
-                    int width = point.x;
-                    int height = point.y;
-                    int smallerDimension = width < height ? width : height;
-                    smallerDimension = smallerDimension * 3 / 4;
-
-                    qrgEncoder = new QRGEncoder(response.body().qrCode, null, QRGContents.Type.TEXT, smallerDimension);
-
-                    Log.d("coba", response.body().qrCode);
-                    try {
-                        bitmap = qrgEncoder.encodeAsBitmap();
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                        byte[] byteArray = stream.toByteArray();
-                        Intent intent = new Intent(GenerateActivity.this, ResultActivity.class);
-                        intent.putExtra(BitmapValue, byteArray);
-                        intent.putExtra(GenerateResponse, response.body());
-                        startActivity(intent);
-                    } catch (WriterException e) {
-                        e.printStackTrace();
-                    }*/
                     Intent intent = new Intent(GenerateActivity.this, ResultActivity.class);
                     intent.putExtra(UrlImgValue, response.body().url);
                     intent.putExtra(GenerateResponse, response.body());

@@ -70,9 +70,6 @@ public class ResultActivity extends AppCompatActivity implements Callback<Detail
         rvList.setLayoutManager(new LinearLayoutManager(this));
         rvList.setAdapter(new DetailAbsensiAdapter(generateQrCodeResponse.dataMhs));
 
-        /*byte[] byteArray = getIntent().getByteArrayExtra(GenerateActivity.BitmapValue);
-        Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);*/
-
         Picasso.get()
                 .load(getIntent().getStringExtra(GenerateActivity.UrlImgValue))
                 .resize(500, 500)

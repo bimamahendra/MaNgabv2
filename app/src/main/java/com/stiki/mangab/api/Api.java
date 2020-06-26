@@ -44,7 +44,7 @@ public interface Api {
     @FormUrlEncoded
     Call<GenerateQrCodeResponse> generateQrCode(@Field("id_matkul") String idMatkul,
                                                 @Field("topik") String topik,
-                                                @Field("tipe") String tipe,
+                                                @Field("tipe") Integer tipe,
                                                 @Field("latitude") double latitude,
                                                 @Field("longitude") double longitude);
 
