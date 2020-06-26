@@ -44,7 +44,7 @@ public interface Api {
     @FormUrlEncoded
     Call<GenerateQrCodeResponse> generateQrCode(@Field("id_matkul") String idMatkul,
                                                 @Field("topik") String topik,
-                                                @Field("tipe") Integer tipe,
+                                                @Field("tipe") String tipe,
                                                 @Field("latitude") double latitude,
                                                 @Field("longitude") double longitude);
 
@@ -52,7 +52,7 @@ public interface Api {
     @FormUrlEncoded
     Call<BaseResponse> absenMhs(@Field("qr_code") String qrCode,
                                 @Field("nrp") String nrp,
-                                @Field("status_absen") String statusAbsen,
+                                @Field("status_absen") Integer statusAbsen,
                                 @Field("latitude_mhs") double latitude,
                                 @Field("longitude_mhs") double longitude);
 

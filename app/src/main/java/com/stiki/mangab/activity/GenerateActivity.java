@@ -66,7 +66,7 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
     public static final String BitmapValue = "bitmap";
     public static final String UrlImgValue = "urlimg";
     public static final String GenerateResponse = "GenerateResponse";
-    private Integer type;
+    private String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,10 +144,10 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId){
                     case R.id.rbOffline:
-                        type = 0;
+                        type = "0";
                         break;
                     case R.id.rbOnline:
-                        type = 1;
+                        type = "1";
                         break;
                 }
             }

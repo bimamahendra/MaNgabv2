@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -116,7 +117,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                     if (location != null) {
                         latitude = location.getLatitude();
                         longitude = location.getLongitude();
-                        api.absenMhs(result.getText(), user.noInduk, "1", latitude, longitude).enqueue(new Callback<BaseResponse>() {
+                        api.absenMhs(result.getText(), user.noInduk, 1, latitude, longitude).enqueue(new Callback<BaseResponse>() {
                             @Override
                             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                                 isCaptured = false;
@@ -149,34 +150,5 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         }
     }
 
-    private void absenMhs(Result result, double latitude, double longitude) {
-        api.absenMhs(result.getText(), user.noInduk, "1", latitude, longitude).enqueue(new Callback<BaseResponse>() {
-            @Override
-            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                isCaptured = false;
-                finish();
-                Intent intent = new Intent(getApplicationContext(), ScanResultActivity.class);
-                intent.putExtra("error", response.body().error);
-                intent.putExtra("message", response.body().message);
-                startActivity(intent);
-            }
-
-            @Override
-            public void onFailure(Call<BaseResponse> call, Throwable t) {
-                isCaptured = false;
-                if (t instanceof JsonSyntaxException) {
-                    finish();
-                    Intent intent = new Intent(getApplicationContext(), ScanResultActivity.class);
-                    intent.putExtra("error", true);
-                    intent.putExtra("message", "Invalid QR Code");
-                    startActivity(intent);
-                } else if (t instanceof UnknownHostException) {
-                    Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-                } else {
-                    t.printStackTrace();
-                }
-            }
-        });
-    }
 }
 
