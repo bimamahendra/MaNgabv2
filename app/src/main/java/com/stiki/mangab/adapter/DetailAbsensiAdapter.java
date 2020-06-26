@@ -44,7 +44,7 @@ public class DetailAbsensiAdapter extends RecyclerView.Adapter<DetailAbsensiAdap
 
     public void setNewData(List<DetailAbsenResponse.MhsData> data){
         this.dataMhs = data;
-        //notifyDataSetChanged();
+        notifyDataSetChanged();
     }
 
     public List<DetailAbsenResponse.MhsData> getDataMhs() {
