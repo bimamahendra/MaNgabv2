@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
 import com.stiki.mangab.R;
 import com.stiki.mangab.adapter.DetailAbsensiAdapter;
 import com.stiki.mangab.api.Api;
@@ -69,17 +70,21 @@ public class ResultActivity extends AppCompatActivity implements Callback<Detail
         rvList.setLayoutManager(new LinearLayoutManager(this));
         rvList.setAdapter(new DetailAbsensiAdapter(generateQrCodeResponse.dataMhs));
 
-        byte[] byteArray = getIntent().getByteArrayExtra(GenerateActivity.BitmapValue);
-        Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        /*byte[] byteArray = getIntent().getByteArrayExtra(GenerateActivity.BitmapValue);
+        Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);*/
 
-        ivQR.setImageBitmap(bmp);
+        Picasso.get()
+                .load(getIntent().getStringExtra(GenerateActivity.UrlImgValue))
+                .resize(500, 500)
+                .centerCrop()
+                .into(ivQR);
 
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), RekapActivity.class);
                 intent.putExtra("absen", (ArrayList)((DetailAbsensiAdapter) rvList.getAdapter()).getDataMhs());
-                intent.putExtra("qrcode", generateQrCodeResponse.qrCode);
+                intent.putExtra("qrcode", generateQrCodeResponse.url);
                 startActivity(intent);
             }
         });

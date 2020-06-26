@@ -6,7 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class DetailAbsenResponse extends BaseResponse implements Serializable {
-    @SerializedName("data")
+    @SerializedName("data_mhs")
     public List<MhsData> data;
 
     public static class MhsData implements Serializable{

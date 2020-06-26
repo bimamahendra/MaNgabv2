@@ -39,12 +39,12 @@ public class DetailAbsensiAdapter extends RecyclerView.Adapter<DetailAbsensiAdap
 
     @Override
     public int getItemCount() {
-        return dataMhs.size();
+        return dataMhs == null ? 0 :dataMhs.size();
     }
 
     public void setNewData(List<DetailAbsenResponse.MhsData> data){
         this.dataMhs = data;
-        notifyDataSetChanged();
+        //notifyDataSetChanged();
     }
 
     public List<DetailAbsenResponse.MhsData> getDataMhs() {

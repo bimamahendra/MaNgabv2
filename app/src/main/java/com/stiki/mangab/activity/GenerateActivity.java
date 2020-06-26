@@ -64,6 +64,7 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
     RadioButton rbOffline, rbOnline;
 
     public static final String BitmapValue = "bitmap";
+    public static final String UrlImgValue = "urlimg";
     public static final String GenerateResponse = "GenerateResponse";
     private Integer type;
 
@@ -202,7 +203,7 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void onResponse(Call<GenerateQrCodeResponse> call, Response<GenerateQrCodeResponse> response) {
                 if(!response.body().error){
-                    WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
+                    /*WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
                     Display display = manager.getDefaultDisplay();
                     Point point = new Point();
                     display.getSize(point);
@@ -213,6 +214,7 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
 
                     qrgEncoder = new QRGEncoder(response.body().qrCode, null, QRGContents.Type.TEXT, smallerDimension);
 
+                    Log.d("coba", response.body().qrCode);
                     try {
                         bitmap = qrgEncoder.encodeAsBitmap();
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -224,7 +226,11 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
                         startActivity(intent);
                     } catch (WriterException e) {
                         e.printStackTrace();
-                    }
+                    }*/
+                    Intent intent = new Intent(GenerateActivity.this, ResultActivity.class);
+                    intent.putExtra(UrlImgValue, response.body().url);
+                    intent.putExtra(GenerateResponse, response.body());
+                    startActivity(intent);
                 }else {
                     Toast.makeText(GenerateActivity.this, response.body().message, Toast.LENGTH_SHORT).show();
                 }
