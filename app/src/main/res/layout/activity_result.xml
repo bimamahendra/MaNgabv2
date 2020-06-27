@@ -12,7 +12,7 @@
         android:layout_height="?android:attr/actionBarSize"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="@drawable/toolbar_history_mhs">
+        android:background="@color/colorPrimary">
         <TextView
             android:textColor="@android:color/white"
             android:layout_width="wrap_content"

@@ -44,13 +44,6 @@ public class SplashScreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash_screen);
 
         api = ApiClient.getClient();
-        btnRetry = findViewById(R.id.btnRetry);
-
-        btnRetry.setOnClickListener(v -> {
-            Intent intent = new Intent(getApplicationContext(), SplashScreenActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-        });
 
         String[] PERMISSIONS = {
                 Manifest.permission.READ_PHONE_STATE,

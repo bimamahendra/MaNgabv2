@@ -9,9 +9,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.stiki.mangab.R;
@@ -32,6 +37,8 @@ public class LoginActivity extends AppCompatActivity {
 
     EditText etNrp, etPassword;
     Button btnLogin;
+    ImageButton btnAbout;
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btnLogin);
         etNrp = findViewById(R.id.etNRP);
         etPassword = findViewById(R.id.etPassword);
+        btnAbout = findViewById(R.id.btnAbout);
 
         btnLogin.setOnClickListener(v -> api.login(etNrp.getText().toString(), etPassword.getText().toString(), getDeviceId()).enqueue(new Callback<LoginResponse>() {
             @Override
@@ -67,6 +75,13 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         }));
+
+        btnAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), AboutActivity.class));
+            }
+        });
     }
 
     private String getDeviceId(){
@@ -84,5 +99,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
         return imei;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finishAffinity();
     }
 }

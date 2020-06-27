@@ -49,7 +49,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:background="@drawable/image_enter_code"
+        android:background="@color/colorPrimary"
         android:padding="25dp">
 
         <Button
