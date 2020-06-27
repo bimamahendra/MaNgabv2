@@ -21,8 +21,8 @@ public class HistoryAbsensiResponse extends BaseResponse {
         @SerializedName("topik_matkul")
         public String topikMatkul;
 
-        @SerializedName("ruangan_matkul")
-        public String ruanganMatkul;
+        @SerializedName("jenis_absen")
+        public int jenisAbsen;
 
         @SerializedName("jadwal_kelas")
         public String jadwalKelas;

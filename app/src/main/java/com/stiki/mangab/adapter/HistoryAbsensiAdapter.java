@@ -31,8 +31,8 @@ public class HistoryAbsensiAdapter extends RecyclerView.Adapter<HistoryAbsensiAd
     @Override
     public void onBindViewHolder(@NonNull HistoriAbsensiVH holder, int position) {
         holder.tvMataKuliahClass.setText(dataHistory.get(position).namaMatkul + " | " + dataHistory.get(position).kelasMatkul);
-        holder.tvClassDateTime.setText(dataHistory.get(position).ruanganMatkul + ", " + dataHistory.get(position).jadwalKelas);
-        holder.tvRoom.setText(dataHistory.get(position).ruanganMatkul);
+        holder.tvClassDateTime.setText(dataHistory.get(position).jadwalKelas);
+        holder.tvRoom.setText(dataHistory.get(position).jenisAbsen == 0? "Offline" : "Online");
         holder.tvTopik.setText(dataHistory.get(position).topikMatkul);
     }
 

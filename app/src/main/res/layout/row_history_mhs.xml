@@ -55,7 +55,8 @@
                 android:layout_gravity="center_vertical"
                 android:id="@+id/tvAbsen"
                 android:textSize="12sp"
-                android:textColor="@color/colorText"/>
+                android:textColor="@android:color/black"
+                android:textStyle="bold"/>
         </LinearLayout>
 
         <LinearLayout
@@ -78,7 +79,8 @@
                 android:layout_gravity="center_vertical"
                 android:id="@+id/tvNamaDosen"
                 android:textSize="12sp"
-                android:textColor="@color/colorText"/>
+                android:textColor="@android:color/black"
+                android:textStyle="bold"/>
         </LinearLayout>
 
         <LinearLayout
@@ -101,7 +103,8 @@
                 android:layout_gravity="center_vertical"
                 android:id="@+id/tvStatusKehadiran"
                 android:textSize="12sp"
-                android:textColor="@color/colorText"/>
+                android:textColor="@android:color/black"
+                android:textStyle="bold"/>
         </LinearLayout>
 
     </LinearLayout>
