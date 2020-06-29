@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.stiki.mangab.R;
 import com.stiki.mangab.api.response.HistoryAbsensiResponse;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class HistoryAbsensiAdapter extends RecyclerView.Adapter<HistoryAbsensiAdapter.HistoriAbsensiVH> {
@@ -31,9 +34,27 @@ public class HistoryAbsensiAdapter extends RecyclerView.Adapter<HistoryAbsensiAd
     @Override
     public void onBindViewHolder(@NonNull HistoriAbsensiVH holder, int position) {
         holder.tvMataKuliahClass.setText(dataHistory.get(position).namaMatkul + " | " + dataHistory.get(position).kelasMatkul);
-        holder.tvClassDateTime.setText(dataHistory.get(position).jadwalKelas);
+        holder.tvClassDateTime.setText(parseDate(dataHistory.get(position).jadwalKelas));
         holder.tvRoom.setText(dataHistory.get(position).jenisAbsen == 0? "Offline" : "Online");
         holder.tvTopik.setText(dataHistory.get(position).topikMatkul);
+    }
+
+    public String parseDate(String time) {
+        String inputPattern = "yyyy-MM-dd HH:mm:ss";
+        String outputPattern = "dd MMMM yyyy HH:mm";
+        SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
+        SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
+
+        Date date = null;
+        String str = null;
+
+        try {
+            date = inputFormat.parse(time);
+            str = outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return str;
     }
 
     @Override

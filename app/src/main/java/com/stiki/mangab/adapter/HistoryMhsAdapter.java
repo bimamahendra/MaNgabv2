@@ -8,6 +8,9 @@ import android.widget.TextView;
 import com.stiki.mangab.R;
 import com.stiki.mangab.api.response.HistoryAbsensiMhsResponse;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -31,8 +34,9 @@ public class HistoryMhsAdapter extends RecyclerView.Adapter<HistoryMhsAdapter.Hi
 
     @Override
     public void onBindViewHolder(@NonNull HistoryAdapterVH holder, int position) {
-        holder.tvMatkul.setText(list.get(position).namaMatkul);
-        holder.tvAbsen.setText(list.get(position).jadwalAbsen);
+
+        holder.tvMatkul.setText(list.get(position).namaMatkul + " | " + list.get(position).kelasMatkul);
+        holder.tvAbsen.setText(parseDate(list.get(position).jadwalAbsen)+ " - " + (list.get(position).jenisAbsen == 0? "Offline" : "Online"));
         holder.tvNamaDosen.setText(list.get(position).namaDosen);
         if(list.get(position).statusAbsen == 0){
             holder.tvStatusKehadiran.setText("Alpa");
@@ -43,6 +47,24 @@ public class HistoryMhsAdapter extends RecyclerView.Adapter<HistoryMhsAdapter.Hi
         }else if(list.get(position).statusAbsen == 3){
             holder.tvStatusKehadiran.setText("Sakit");
         }
+    }
+
+    public String parseDate(String time) {
+        String inputPattern = "yyyy-MM-dd HH:mm:ss";
+        String outputPattern = "dd MMMM yyyy HH:mm";
+        SimpleDateFormat inputFormat = new SimpleDateFormat(inputPattern);
+        SimpleDateFormat outputFormat = new SimpleDateFormat(outputPattern);
+
+        Date date = null;
+        String str = null;
+
+        try {
+            date = inputFormat.parse(time);
+            str = outputFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return str;
     }
 
     @Override
