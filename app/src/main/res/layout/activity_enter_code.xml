@@ -62,7 +62,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            app:cardBackgroundColor="@color/colorAccent">
+            app:cardBackgroundColor="@color/colorPrimary">
 
             <EditText
                 android:id="@+id/etCode1"
@@ -82,7 +82,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            app:cardBackgroundColor="@color/colorAccent">
+            app:cardBackgroundColor="@color/colorPrimary">
 
             <EditText
                 android:id="@+id/etCode2"
@@ -102,7 +102,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            app:cardBackgroundColor="@color/colorAccent">
+            app:cardBackgroundColor="@color/colorPrimary">
 
             <EditText
                 android:id="@+id/etCode3"
@@ -122,7 +122,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            app:cardBackgroundColor="@color/colorAccent">
+            app:cardBackgroundColor="@color/colorPrimary">
 
             <EditText
                 android:id="@+id/etCode4"
@@ -142,7 +142,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            app:cardBackgroundColor="@color/colorAccent">
+            app:cardBackgroundColor="@color/colorPrimary">
 
             <EditText
                 android:id="@+id/etCode5"
@@ -162,7 +162,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_weight="1"
-            app:cardBackgroundColor="@color/colorAccent">
+            app:cardBackgroundColor="@color/colorPrimary">
 
             <EditText
                 android:id="@+id/etCode6"
@@ -185,7 +185,7 @@
         android:layout_marginLeft="75dp"
         android:layout_marginTop="32dp"
         android:layout_marginRight="75dp"
-        android:background="@drawable/btn_round"
+        android:background="@drawable/btn_round_orange"
         android:fontFamily="@font/montserrat_bold"
         android:text="Submit"
         android:textAllCaps="false"

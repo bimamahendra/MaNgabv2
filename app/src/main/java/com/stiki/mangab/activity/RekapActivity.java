@@ -34,7 +34,7 @@ import retrofit2.Response;
 public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdapter.RekapAbsensiListener {
 
     private Api api;
-    private String qrCode;
+    private String idAbsen;
 
     private RecyclerView rvRekap;
     private Button btnRekap;
@@ -56,7 +56,7 @@ public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdap
             }
         }
 
-        qrCode = getIntent().getStringExtra("qrcode");
+        idAbsen = getIntent().getStringExtra("idabsen");
 
         api = ApiClient.getClient();
 
@@ -69,7 +69,7 @@ public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdap
         btnRekap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                api.rekap(qrCode, etNote.getText().toString()).enqueue(new Callback<BaseResponse>() {
+                api.rekap(idAbsen, etNote.getText().toString()).enqueue(new Callback<BaseResponse>() {
                     @Override
                     public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                         if (!response.body().error) {
@@ -98,7 +98,7 @@ public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdap
 
     @Override
     public void onIjinMhs(DetailAbsenResponse.MhsData data) {
-        api.absenMhs(qrCode, data.nrp, 2, 0, 0).enqueue(new Callback<BaseResponse>() {
+        api.absenMhs(idAbsen, data.nrp, 2, 0, 0).enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                 Log.e("Izin", "Sukses");
@@ -118,7 +118,7 @@ public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdap
 
     @Override
     public void onSakitMhs(DetailAbsenResponse.MhsData data) {
-        api.absenMhs(qrCode, data.nrp, 3, 0, 0).enqueue(new Callback<BaseResponse>() {
+        api.absenMhs(idAbsen, data.nrp, 3, 0, 0).enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                 Log.e("Sakit", "Sukses");
@@ -147,7 +147,7 @@ public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdap
                 if (location != null) {
                     double latitude = location.getLatitude();
                     double longitude = location.getLongitude();
-                    api.absenMhs(qrCode, data.nrp, 1, latitude, longitude).enqueue(new Callback<BaseResponse>() {
+                    api.absenMhs(idAbsen, data.nrp, 1, latitude, longitude).enqueue(new Callback<BaseResponse>() {
                         @Override
                         public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                             Log.e("Hadir", "Sukses");
@@ -171,7 +171,7 @@ public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdap
 
     @Override
     public void onAlpaMhs(DetailAbsenResponse.MhsData data) {
-        api.absenMhs(qrCode, data.nrp, 0, 0, 0).enqueue(new Callback<BaseResponse>() {
+        api.absenMhs(idAbsen, data.nrp, 0, 0, 0).enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                 Log.e("Alpa", "Sukses");

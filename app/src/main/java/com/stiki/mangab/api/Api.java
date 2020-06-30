@@ -70,6 +70,6 @@ public interface Api {
 
     @POST("absen/rekap")
     @FormUrlEncoded
-    Call<BaseResponse> rekap(@Field("qr_code") String qrCode, @Field("note") String note);
+    Call<BaseResponse> rekap(@Field("id_absen") String idAbsen, @Field("note") String note);
 
 }

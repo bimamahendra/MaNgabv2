@@ -81,7 +81,7 @@ public class ResultActivity extends AppCompatActivity implements Callback<Detail
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), RekapActivity.class);
                 intent.putExtra("absen", (ArrayList)((DetailAbsensiAdapter) rvList.getAdapter()).getDataMhs());
-                intent.putExtra("qrcode", generateQrCodeResponse.url);
+                intent.putExtra("idabsen", generateQrCodeResponse.idAbsen);
                 startActivity(intent);
             }
         });
