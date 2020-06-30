@@ -44,7 +44,6 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
 
     private ZXingScannerView mScannerView;
     private boolean isCaptured = false;
-    private double latitude, longitude;
 
     FrameLayout frameLayoutCamera;
     Guideline guideline;
@@ -115,8 +114,8 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
                 @Override
                 public void onSuccess(Location location) {
                     if (location != null) {
-                        latitude = location.getLatitude();
-                        longitude = location.getLongitude();
+                        double latitude = location.getLatitude();
+                        double longitude = location.getLongitude();
                         api.absenMhs(result.getText(), user.noInduk, 1, latitude, longitude).enqueue(new Callback<BaseResponse>() {
                             @Override
                             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {

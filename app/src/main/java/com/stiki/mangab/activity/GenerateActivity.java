@@ -179,8 +179,6 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
                 @Override
                 public void onSuccess(Location location) {
                     if (location != null){
-                        // Do it all with location
-                        Log.d("My Current location", "Lat : " + location.getLatitude() + " Long : " + location.getLongitude());
                         double latitude= location.getLatitude();
                         double longitude = location.getLongitude();
                         generateQrCode(latitude, longitude);
