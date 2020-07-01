@@ -41,6 +41,8 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     private Button btnRetry;
 
+    private static String TAG = "checkpermission";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,15 +59,15 @@ public class SplashScreenActivity extends AppCompatActivity {
 
 
         if(!hasPermissions(PERMISSIONS)){
-            ActivityCompat.requestPermissions(this, PERMISSIONS, 0);
+            ActivityCompat.requestPermissions(this, PERMISSIONS, 123);
         }else {
             checkStatusLogin();
         }
+
     }
-    
+
     private void checkStatusLogin(){
         User user = AppPreference.getUser(this);
-
         if(user == null) {
             new Handler().postDelayed(() -> api.checkStatusLogin(getDeviceId())
                             .enqueue(new Callback<CheckStatusLoginResponse>() {
@@ -143,14 +145,28 @@ public class SplashScreenActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case 0: {
-                if(grantResults[0] != PackageManager.PERMISSION_GRANTED){
-                    Toast.makeText(this, "Izin diperlukan untuk membaca device id, kamera dan lokasi", Toast.LENGTH_SHORT).show();
-                    finish();
-                }else {
-                    checkStatusLogin();
+            case 123:
+                boolean isPerpermissionForAllGranted = false;
+                if (grantResults.length > 0 && permissions.length==grantResults.length) {
+                    for (int i = 0; i < permissions.length; i++){
+                        if (grantResults[i] == PackageManager.PERMISSION_GRANTED){
+                            isPerpermissionForAllGranted=true;
+                        }else{
+                            isPerpermissionForAllGranted=false;
+                        }
+                    }
+                    Log.e(TAG, "Permission Granted, Now you can use local drive .");
+                } else {
+                    isPerpermissionForAllGranted=true;
+                    Log.e(TAG, "Permission Denied, You cannot use local drive .");
                 }
-            }
+                if(isPerpermissionForAllGranted){
+                    checkStatusLogin();
+                }else{
+                    Toast.makeText(this, "Permision required, please allow..", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                break;
         }
     }
 
