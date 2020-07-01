@@ -48,6 +48,10 @@ public interface Api {
                                                 @Field("latitude") double latitude,
                                                 @Field("longitude") double longitude);
 
+    @POST("absen/regenerate")
+    @FormUrlEncoded
+    Call<GenerateQrCodeResponse> regenerateQrCode(@Field("id_absen") String idAbsen);
+
     @POST("absen/absenMhs")
     @FormUrlEncoded
     Call<BaseResponse> absenMhs(@Field("qr_code") String qrCode,

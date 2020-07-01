@@ -28,9 +28,15 @@ public class HistoryAbsensiResponse extends BaseResponse {
         public String jadwalKelas;
 
         @SerializedName("status_absen")
-        public String statusAbsen;
+        public int statusAbsen;
+        //0 AKTIF
+        //1 UDAH DI REKAP
+        //2 UDAH DI VALIDASI
 
         @SerializedName("jadwal_absen")
         public String jadwalAbsen;
+
+        @SerializedName("id_absen")
+        public String idAbsen;
     }
 }

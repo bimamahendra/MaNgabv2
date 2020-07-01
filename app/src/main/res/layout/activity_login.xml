@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:fontFamily="@font/montserrat_light"
-            android:text="NRP" />
+            android:text="ID Number" />
 
         <EditText
             android:id="@+id/etNRP"
