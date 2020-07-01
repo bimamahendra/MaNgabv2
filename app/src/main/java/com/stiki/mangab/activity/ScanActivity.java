@@ -104,6 +104,11 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         super.onPause();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
     @SuppressLint("MissingPermission")
     @Override
     public void handleResult(Result result) {
