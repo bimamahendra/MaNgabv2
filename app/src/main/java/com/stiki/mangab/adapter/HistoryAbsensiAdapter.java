@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,8 +60,8 @@ public class HistoryAbsensiAdapter extends RecyclerView.Adapter<HistoryAbsensiAd
 
         if (dataHistory.get(position).statusAbsen != 0){
             holder.itemView.setClickable(false);
-            holder.itemView.setBackgroundColor(Color.GRAY);
         }else {
+            holder.llBodyCard.setBackgroundColor(Color.parseColor("#A4FFA8"));
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -119,6 +120,7 @@ public class HistoryAbsensiAdapter extends RecyclerView.Adapter<HistoryAbsensiAd
     public class HistoriAbsensiVH extends RecyclerView.ViewHolder {
 
         TextView tvMataKuliahClass, tvClassDateTime, tvTopik, tvRoom;
+        LinearLayout llBodyCard;
 
         public HistoriAbsensiVH(@NonNull View itemView) {
             super(itemView);
@@ -126,6 +128,7 @@ public class HistoryAbsensiAdapter extends RecyclerView.Adapter<HistoryAbsensiAd
             tvClassDateTime = itemView.findViewById(R.id.tvClassDateTime);
             tvTopik = itemView.findViewById(R.id.tvTopik);
             tvRoom = itemView.findViewById(R.id.tvRoom);
+            llBodyCard = itemView.findViewById(R.id.llBodyCard);
         }
 
     }
