@@ -14,11 +14,9 @@ import retrofit2.Response;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.os.Build;
@@ -31,16 +29,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.LocationSettingsRequest;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.stiki.mangab.R;
 import com.stiki.mangab.api.Api;
 import com.stiki.mangab.api.ApiClient;
@@ -50,16 +38,11 @@ import com.stiki.mangab.preference.AppPreference;
 
 import java.net.UnknownHostException;
 
-public class SplashScreenActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener{
+public class SplashScreenActivity extends AppCompatActivity {
 
     private Api api;
 
     private Button btnRetry;
-    LocationRequest mLocationRequest;
-    GoogleApiClient mGoogleApiClient;
-    PendingResult<LocationSettingsResult> result;
-    final static int REQUEST_LOCATION = 199;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,13 +54,25 @@ public class SplashScreenActivity extends AppCompatActivity implements GoogleApi
         if (isLocationEnabled(this)) {
             checkPermission();
         }else{
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addApi(LocationServices.API)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this).build();
-            mGoogleApiClient.connect();
+                final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage("Your location seems to be turn off, please turn on location to use this application.")
+                        .setCancelable(false)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog, final int id) {
+                                startActivityForResult(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 123);
+                            }
+                        })
+                        .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(final DialogInterface dialog, final int id) {
+                                dialog.cancel();
+                                finish();
+                            }
+                        });
+                final AlertDialog alert = builder.create();
+                alert.show();
         }
     }
+
 
     private void checkPermission(){
         String[] PERMISSIONS = {
@@ -86,7 +81,6 @@ public class SplashScreenActivity extends AppCompatActivity implements GoogleApi
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.CAMERA
         };
-
 
         if(!hasPermissions(PERMISSIONS)){
             ActivityCompat.requestPermissions(this, PERMISSIONS, 123);
@@ -236,83 +230,13 @@ public class SplashScreenActivity extends AppCompatActivity implements GoogleApi
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case REQUEST_LOCATION:
-                switch (resultCode) {
-                    case Activity.RESULT_OK: {
-                        // All required changes were successfully made
-                        Toast.makeText(SplashScreenActivity.this, "Location service enabled", Toast.LENGTH_LONG).show();
-                        checkPermission();
-                        break;
-                    }
-                    case Activity.RESULT_CANCELED: {
-                        // The user was asked to change settings, but chose not to
-                        Toast.makeText(SplashScreenActivity.this, "Location not enabled, user cancelled. Please enable..", Toast.LENGTH_LONG).show();
-                        finish();
-                        break;
-                    }
-                    default: {
-                        break;
-                    }
-                }
+            case 123: {
+                finish();
+                startActivity(getIntent());
+                break;
+            }
         }
 
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        mLocationRequest = LocationRequest.create();
-        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        mLocationRequest.setInterval(30 * 1000);
-        mLocationRequest.setFastestInterval(5 * 1000);
-
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(mLocationRequest);
-        builder.setAlwaysShow(true);
-
-        result = LocationServices.SettingsApi.checkLocationSettings(mGoogleApiClient, builder.build());
-
-        result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
-            @Override
-            public void onResult(@NonNull LocationSettingsResult result) {
-                final Status status = result.getStatus();
-                //final LocationSettingsStates state = result.getLocationSettingsStates();
-                switch (status.getStatusCode()) {
-                    case LocationSettingsStatusCodes.SUCCESS:
-                        // All location settings are satisfied. The client can initialize location
-                        // requests here.
-                        //...
-                        break;
-                    case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                        // Location settings are not satisfied. But could be fixed by showing the user
-                        // a dialog.
-                        try {
-                            // Show the dialog by calling startResolutionForResult(),
-                            // and check the result in onActivityResult().
-                            status.startResolutionForResult(
-                                    SplashScreenActivity.this,
-                                    REQUEST_LOCATION);
-                        } catch (IntentSender.SendIntentException e) {
-                            // Ignore the error.
-                        }
-                        break;
-                    case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                        // Location settings are not satisfied. However, we have no way to fix the
-                        // settings so we won't show the dialog.
-                        //...
-                        break;
-                }
-            }
-        });
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
 }
