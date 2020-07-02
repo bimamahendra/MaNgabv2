@@ -1,34 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="activity.GenerateActivity"
-    android:padding="16dp"
-    android:background="@android:color/white"
-    android:orientation="vertical">
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:background="@color/colorBlue"
-        android:visibility="gone">
-        <TextView
-            android:textColor="@android:color/white"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Generate Attendace QR Code"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:fontFamily="@font/montserrat_semibold"/>
-    </LinearLayout>
-
-    <ScrollView
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true">
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:padding="16dp"
+        tools:context="activity.GenerateActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -145,27 +128,27 @@
                     android:text="Class Type" />
 
                 <RadioGroup
+                    android:id="@+id/rgType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:weightSum="2"
-                    android:id="@+id/rgType">
+                    android:weightSum="2">
+
                     <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:id="@+id/rbOffline"
-                        android:text="Offline"
-                        android:fontFamily="@font/montserrat_semibold"
-                        />
-                    <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:id="@+id/rbOnline"
-                        android:text="Online"
                         android:fontFamily="@font/montserrat_semibold"
-                        />
+                        android:text="Offline" />
+
+                    <RadioButton
+                        android:id="@+id/rbOnline"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/montserrat_semibold"
+                        android:text="Online" />
 
                 </RadioGroup>
 
@@ -185,5 +168,5 @@
 
             </LinearLayout>
         </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

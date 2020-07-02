@@ -34,6 +34,7 @@ import retrofit2.Response;
 
 import static com.stiki.mangab.activity.GenerateActivity.GenerateResponse;
 import static com.stiki.mangab.activity.GenerateActivity.UrlImgValue;
+import static com.stiki.mangab.activity.GenerateActivity.idAbsen;
 
 public class HistoryAbsensiAdapter extends RecyclerView.Adapter<HistoryAbsensiAdapter.HistoriAbsensiVH> {
 
@@ -71,6 +72,7 @@ public class HistoryAbsensiAdapter extends RecyclerView.Adapter<HistoryAbsensiAd
                             if(!response.body().error){
                                 Intent intent = new Intent(v.getContext(), ResultActivity.class);
                                 intent.putExtra(UrlImgValue, response.body().url);
+                                intent.putExtra(idAbsen, response.body().idAbsen);
                                 intent.putExtra(GenerateResponse, response.body());
                                 v.getContext().startActivity(intent);
                             }else {

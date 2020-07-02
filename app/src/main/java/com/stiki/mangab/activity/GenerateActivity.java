@@ -60,6 +60,7 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
     RadioButton rbOffline, rbOnline;
 
     public static final String UrlImgValue = "urlimg";
+    public static final String idAbsen = "idabsen";
     public static final String GenerateResponse = "GenerateResponse";
     private Integer type;
 
@@ -80,7 +81,7 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
         rbOnline = findViewById(R.id.rbOnline);
 
         tvDosenName.setText(user.nama);
-        tvDate.setText(new SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+        tvDate.setText(new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
                 .format(Calendar.getInstance().getTime()));
 
         api.myLecture(user.noInduk).enqueue(new Callback<MyLectureResponse>() {
@@ -198,6 +199,7 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
                 if(!response.body().error){
                     Intent intent = new Intent(GenerateActivity.this, ResultActivity.class);
                     intent.putExtra(UrlImgValue, response.body().url);
+                    intent.putExtra(idAbsen, response.body().idAbsen);
                     intent.putExtra(GenerateResponse, response.body());
                     startActivity(intent);
                 }else {

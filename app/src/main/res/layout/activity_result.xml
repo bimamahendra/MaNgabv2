@@ -30,9 +30,22 @@
         android:background="@android:color/white">
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.26"
             android:src="@color/bgCardview"
             android:id="@+id/ivQRCode"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.04"
+            android:id="@+id/tvCode"
+            android:text="@string/app_name"
+            android:textAlignment="center"
+            android:padding="5dp"
+            android:fontFamily="@font/montserrat_semibold"
+            android:textColor="@android:color/black"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
     </LinearLayout>
 
     <LinearLayout

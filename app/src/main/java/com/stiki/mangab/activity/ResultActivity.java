@@ -18,6 +18,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
@@ -38,6 +39,7 @@ public class ResultActivity extends AppCompatActivity implements Callback<Detail
     ImageView ivQR;
     RecyclerView rvList;
     Button btnDone;
+    TextView tvCode;
 
     GenerateQrCodeResponse generateQrCodeResponse;
 
@@ -69,6 +71,7 @@ public class ResultActivity extends AppCompatActivity implements Callback<Detail
         ivQR = findViewById(R.id.ivQRCode);
         rvList = findViewById(R.id.rvList);
         btnDone = findViewById(R.id.btnDone);
+        tvCode = findViewById(R.id.tvCode);
 
         rvList.setLayoutManager(new LinearLayoutManager(this));
         rvList.setAdapter(new DetailAbsensiAdapter(generateQrCodeResponse.dataMhs));
@@ -79,6 +82,7 @@ public class ResultActivity extends AppCompatActivity implements Callback<Detail
                 .centerCrop()
                 .into(ivQR);
 
+        tvCode.setText(getIntent().getStringExtra(GenerateActivity.idAbsen));
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
