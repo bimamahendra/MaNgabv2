@@ -20,7 +20,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingVertical="80dp"
+            android:paddingTop="100dp"
+            android:paddingBottom="50dp"
             android:layout_gravity="center"
             android:orientation="vertical">
 
@@ -48,16 +49,17 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_gravity="left"
-            android:padding="16dp">
+            android:paddingStart="16dp"
+            android:paddingTop="10dp">
 
             <TextView
                 android:id="@+id/tvCurrentDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:fontFamily="@font/montserrat_semibold"
                 android:text="Monday,\nFeb 3, 2020"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
+               android:gravity="left"
                 android:textColor="@android:color/white" />
 
         </LinearLayout>
@@ -66,20 +68,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="right"
-            android:orientation="vertical"
-            android:padding="10dp">
+            android:orientation="horizontal"
+            android:paddingEnd="16dp"
+            android:paddingTop="10dp">
 
-            <Button
+            <ImageButton
+                android:id="@+id/btnHelp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserrat_bold"
+                android:gravity="center"
+                android:src="@drawable/ic_baseline_help_outline_24"
+                android:backgroundTint="@color/colorAccent" />
+
+            <ImageButton
                 android:id="@+id/btnLogout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Logout"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
                 android:fontFamily="@font/montserrat_bold"
                 android:gravity="center"
-                android:drawablePadding="10dp"
-                android:drawableEnd="@drawable/ic_logout"
+                android:src="@drawable/ic_logout"
                 android:backgroundTint="@color/colorAccent" />
 
         </LinearLayout>

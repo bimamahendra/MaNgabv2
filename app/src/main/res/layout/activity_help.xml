@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activity.HelpActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tbHelp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/montserrat_bold"
+            android:text="Help"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@android:color/white" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <TextView
+        android:id="@+id/tvOpening"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_semibold"
+        android:padding="16dp"
+        android:text="Help"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/colorText" />
+
+    <TextView
+        android:id="@+id/tvMenuOne"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:background="@color/colorAccent"
+        android:fontFamily="@font/montserrat_semibold"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="8dp"
+        android:text="Menu"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/tvMainOne"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:text="Help"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/colorText" />
+
+    <TextView
+        android:id="@+id/tvMenuTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:background="@color/colorAccent"
+        android:fontFamily="@font/montserrat_semibold"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="8dp"
+        android:text="History"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@android:color/white" />
+
+    <TextView
+        android:id="@+id/tvMainTwo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/montserrat_semibold"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:text="Help"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/colorText" />
+
+    <TextView
+        android:id="@+id/tvClosing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/montserrat_semibold"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="16dp"
+        android:text="If you have problems when logging into the application, please contact your administrator to reset your account."
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textColor="@color/colorText" />
+
+</LinearLayout>

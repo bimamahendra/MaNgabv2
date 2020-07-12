@@ -1,15 +1,15 @@
 package com.stiki.mangab.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.stiki.mangab.R;
 import com.stiki.mangab.api.Api;
@@ -34,12 +34,12 @@ public class MainActivity extends AppCompatActivity {
 
     private CardView cvScan, cvGenerate, cvHistory;
     TextView tvCurrentDate, tvName, tvNoInduk;
-    private Button btnLogout;
+    private ImageButton btnHelp, btnLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_student);
+        setContentView(R.layout.activity_main);
 
         user = AppPreference.getUser(this);
 
@@ -50,36 +50,37 @@ public class MainActivity extends AppCompatActivity {
         tvCurrentDate = findViewById(R.id.tvCurrentDate);
         tvName = findViewById(R.id.tvName);
         tvNoInduk = findViewById(R.id.tvNoInduk);
+        btnHelp = findViewById(R.id.btnHelp);
 
-        tvCurrentDate.setText(new SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
-                .format(Calendar.getInstance().getTime()));
+        String day = new SimpleDateFormat("EEEE", Locale.getDefault())
+                .format(Calendar.getInstance().getTime());
+        String date = new SimpleDateFormat("MMMM dd, yyyy", Locale.getDefault())
+                .format(Calendar.getInstance().getTime());
+        tvCurrentDate.setText(day + "\n" + date);
         tvName.setText(user.nama);
         tvNoInduk.setText(user.noInduk);
 
-        if (user.type.equalsIgnoreCase("mahasiswa")){
+        if (user.type.equalsIgnoreCase("mahasiswa")) {
             cvGenerate.setVisibility(View.GONE);
             cvScan.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             cvGenerate.setVisibility(View.VISIBLE);
             cvScan.setVisibility(View.GONE);
         }
         cvScan.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, ScanActivity.class);
+            Intent intent = new Intent(getApplicationContext(), ScanActivity.class);
             startActivity(intent);
         });
 
         cvGenerate.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, GenerateActivity.class);
+            Intent intent = new Intent(getApplicationContext(), GenerateActivity.class);
             startActivity(intent);
         });
         cvHistory.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), HistoryActivity.class));
-//            if(user.type.equalsIgnoreCase("Mahasiswa")){
-//                startActivity(new Intent(getApplicationContext(), HistoryMhsActivity.class));
-//            }else {
-//                startActivity(new Intent(getApplicationContext(), HistoryActivity.class));
-//            }
         });
+
+        btnHelp.setOnClickListener(v -> startActivity(new Intent(getApplicationContext(), HelpActivity.class)));
 
         btnLogout.setOnClickListener(v -> api.logout(user.noInduk).enqueue(new Callback<BaseResponse>() {
             @Override
@@ -96,9 +97,9 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<BaseResponse> call, Throwable t) {
-                if(t instanceof UnknownHostException){
+                if (t instanceof UnknownHostException) {
                     Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     t.printStackTrace();
                 }
                 Log.e("logout", t.getMessage());

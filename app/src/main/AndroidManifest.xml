@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.EnterCodeActivity"></activity>
+        <activity android:name=".activity.HelpActivity"></activity>
+        <activity android:name=".activity.EnterCodeActivity" />
         <activity android:name=".activity.ScanResultActivity" />
         <activity android:name=".activity.HistoryMhsActivity" />
         <activity android:name=".activity.RekapActivity" />
@@ -38,7 +39,7 @@
         <activity
             android:name=".activity.LoginActivity"
             android:noHistory="true" />
-        <activity android:name=".activity.AboutActivity"/>
+        <activity android:name=".activity.AboutActivity" />
     </application>
 
 </manifest>

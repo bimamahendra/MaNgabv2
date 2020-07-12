@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        android:id="@+id/atoolbar">
+        android:id="@+id/tbAbout">
 
         <TextView
             android:layout_width="wrap_content"
