@@ -1,32 +1,23 @@
 package com.stiki.mangab.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.zxing.WriterException;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.stiki.mangab.R;
 import com.stiki.mangab.api.Api;
 import com.stiki.mangab.api.ApiClient;
@@ -35,8 +26,8 @@ import com.stiki.mangab.api.response.MyClassResponse;
 import com.stiki.mangab.api.response.MyLectureResponse;
 import com.stiki.mangab.model.User;
 import com.stiki.mangab.preference.AppPreference;
+import com.stiki.mangab.preference.MyLocation;
 
-import java.io.ByteArrayOutputStream;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -63,6 +54,7 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
     public static final String idAbsen = "idabsen";
     public static final String GenerateResponse = "GenerateResponse";
     private Integer type;
+    MyLocation myLocation = new MyLocation();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,10 +79,10 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
         api.myLecture(user.noInduk).enqueue(new Callback<MyLectureResponse>() {
             @Override
             public void onResponse(Call<MyLectureResponse> call, Response<MyLectureResponse> response) {
-                if(!response.body().error){
+                if (!response.body().error) {
                     spSubject.setAdapter(new ArrayAdapter<>(getApplicationContext(),
                             android.R.layout.simple_spinner_dropdown_item, response.body().data));
-                }else {
+                } else {
                     Toast.makeText(GenerateActivity.this, response.body().message,
                             Toast.LENGTH_SHORT).show();
                 }
@@ -98,9 +90,9 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onFailure(Call<MyLectureResponse> call, Throwable t) {
-                if(t instanceof UnknownHostException){
+                if (t instanceof UnknownHostException) {
                     Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     t.printStackTrace();
                 }
             }
@@ -120,9 +112,9 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
 
                     @Override
                     public void onFailure(Call<MyClassResponse> call, Throwable t) {
-                        if(t instanceof UnknownHostException){
+                        if (t instanceof UnknownHostException) {
                             Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-                        }else {
+                        } else {
                             t.printStackTrace();
                         }
                     }
@@ -138,7 +130,7 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
         rgType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.rbOffline:
                         type = 0;
                         break;
@@ -156,26 +148,27 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
     @SuppressLint("MissingPermission")
     @Override
     public void onClick(View view) {
-        if(view == btnGenerate){
+        if (view == btnGenerate) {
 
-            selectedClass=(MyClassResponse.MyClassData) spClass.getSelectedItem();
-            if(selectedClass == null){
+            selectedClass = (MyClassResponse.MyClassData) spClass.getSelectedItem();
+            if (selectedClass == null) {
                 Toast.makeText(this, "Class didn't chosen yet", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            if(etTopic.getText().toString().equals("")){
+            if (etTopic.getText().toString().equals("")) {
                 Toast.makeText(this, "Topic is empty", Toast.LENGTH_SHORT).show();
                 return;
             }
 
 
-            if (rgType.getCheckedRadioButtonId() == -1){
+            if (rgType.getCheckedRadioButtonId() == -1) {
                 Toast.makeText(this, "Class type is empty", Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
+            myLocation.getLocation(getApplicationContext(), locationResult);
+            /*FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
             mFusedLocation.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
@@ -185,33 +178,45 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
                         generateQrCode(latitude, longitude);
                     }
                 }
-            });
+            });*/
+
 
         }
     }
 
-    private void generateQrCode(double latitude, double longitude){
-        Log.v("lati", String.valueOf(selectedClass.idMatkul)+etTopic.getText().toString()+type+latitude+longitude);
+    MyLocation.LocationResult locationResult = new MyLocation.LocationResult() {
+        @Override
+        public void gotLocation(Location location) {
+            // TODO Auto-generated method stub
+            double longitude = location.getLongitude();
+            double latitude = location.getLatitude();
+            Log.d("masuk", longitude + " - " + latitude);
+            generateQrCode(latitude, longitude);
+
+        }
+    };
+
+    private void generateQrCode(double latitude, double longitude) {
         api.generateQrCode(selectedClass.idMatkul, etTopic.getText().toString(),
                 type, latitude, longitude).enqueue(new Callback<GenerateQrCodeResponse>() {
             @Override
             public void onResponse(Call<GenerateQrCodeResponse> call, Response<GenerateQrCodeResponse> response) {
-                if(!response.body().error){
+                if (!response.body().error) {
                     Intent intent = new Intent(GenerateActivity.this, ResultActivity.class);
                     intent.putExtra(UrlImgValue, response.body().url);
                     intent.putExtra(idAbsen, response.body().idAbsen);
                     intent.putExtra(GenerateResponse, response.body());
                     startActivity(intent);
-                }else {
+                } else {
                     Toast.makeText(GenerateActivity.this, response.body().message, Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<GenerateQrCodeResponse> call, Throwable t) {
-                if(t instanceof UnknownHostException){
+                if (t instanceof UnknownHostException) {
                     Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     t.printStackTrace();
                 }
             }

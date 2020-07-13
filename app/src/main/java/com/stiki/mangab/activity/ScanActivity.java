@@ -17,9 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.Guideline;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.gson.JsonSyntaxException;
 import com.google.zxing.Result;
 import com.stiki.mangab.R;
@@ -28,6 +25,7 @@ import com.stiki.mangab.api.ApiClient;
 import com.stiki.mangab.api.response.BaseResponse;
 import com.stiki.mangab.model.User;
 import com.stiki.mangab.preference.AppPreference;
+import com.stiki.mangab.preference.MyLocation;
 
 import java.net.UnknownHostException;
 
@@ -48,6 +46,9 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     FrameLayout frameLayoutCamera;
     Guideline guideline;
 
+    MyLocation myLocation = new MyLocation();
+    double latitude, longitude;
+
     @SuppressLint("MissingPermission")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,7 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         frameLayoutCamera = findViewById(R.id.frame_layout_camera);
         guideline = findViewById(R.id.guideline);
         btnEnterCode = findViewById(R.id.btnEnterCode);
+        myLocation.getLocation(getApplicationContext(), locationResult);
         initScannerView();
 
         btnEnterCode.setOnClickListener(new View.OnClickListener() {
@@ -114,44 +116,49 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     public void handleResult(Result result) {
         if (!isCaptured) {
             isCaptured = true;
-            FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
-            mFusedLocation.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    if (location != null) {
-                        double latitude = location.getLatitude();
-                        double longitude = location.getLongitude();
-                        api.absenMhs(result.getText(), user.noInduk, 1, latitude, longitude).enqueue(new Callback<BaseResponse>() {
-                            @Override
-                            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                                isCaptured = false;
-                                finish();
-                                Intent intent = new Intent(getApplicationContext(), ScanResultActivity.class);
-                                intent.putExtra("error", response.body().error);
-                                intent.putExtra("message", response.body().message);
-                                startActivity(intent);
-                            }
-
-                            @Override
-                            public void onFailure(Call<BaseResponse> call, Throwable t) {
-                                isCaptured = false;
-                                if (t instanceof JsonSyntaxException) {
-                                    finish();
-                                    Intent intent = new Intent(getApplicationContext(), ScanResultActivity.class);
-                                    intent.putExtra("error", true);
-                                    intent.putExtra("message", "Invalid QR Code");
-                                    startActivity(intent);
-                                } else if (t instanceof UnknownHostException) {
-                                    Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    t.printStackTrace();
-                                }
-                            }
-                        });
-                    }
-                }
-            });
+            Log.d("masukmhssatu", longitude + " - " + latitude);
+            scanQrCode(result.getText(), latitude, longitude);
         }
+    }
+
+    MyLocation.LocationResult locationResult = new MyLocation.LocationResult() {
+        @Override
+        public void gotLocation(Location location) {
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+            Log.d("masukmhsdua", longitude + " - " + latitude);
+        }
+    };
+
+    private void scanQrCode(String result, double latitude, double longitude) {
+        api.absenMhs(result, user.noInduk, 1, latitude, longitude).enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                isCaptured = false;
+                finish();
+                Intent intent = new Intent(getApplicationContext(), ScanResultActivity.class);
+                intent.putExtra("error", response.body().error);
+                intent.putExtra("message", response.body().message);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                isCaptured = false;
+                if (t instanceof JsonSyntaxException) {
+                    finish();
+                    Intent intent = new Intent(getApplicationContext(), ScanResultActivity.class);
+                    intent.putExtra("error", true);
+                    intent.putExtra("message", "Invalid QR Code");
+                    startActivity(intent);
+                } else if (t instanceof UnknownHostException) {
+                    Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+                } else {
+                    t.printStackTrace();
+                }
+            }
+        });
+
     }
 
 }
