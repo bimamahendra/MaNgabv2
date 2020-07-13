@@ -61,22 +61,18 @@ public class RekapAbsensiAdapter extends RecyclerView.Adapter<RekapAbsensiAdapte
                 switch (checkedId) {
                     case R.id.rbHadir:
                         listMhs.get(position).statusAbsen = 1;
-                        notifyDataSetChanged();
                         listener.onHadirMhs(listMhs.get(position));
                         break;
                     case R.id.rbSakit:
                         listMhs.get(position).statusAbsen = 3;
-                        notifyDataSetChanged();
                         listener.onSakitMhs(listMhs.get(position));
                         break;
                     case R.id.rbIjin:
                         listMhs.get(position).statusAbsen = 2;
                         listener.onIjinMhs(listMhs.get(position));
-                        notifyDataSetChanged();
                         break;
                     case R.id.rbAlpa:
                         listMhs.get(position).statusAbsen = 0;
-                        notifyDataSetChanged();
                         listener.onAlpaMhs(listMhs.get(position));
                         break;
                 }

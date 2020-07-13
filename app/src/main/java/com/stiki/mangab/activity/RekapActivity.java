@@ -194,7 +194,14 @@ public class RekapActivity extends AppCompatActivity implements RekapAbsensiAdap
     }
 
     public void setRecyclerView() {
+        RekapAbsensiAdapter rekapAbsensiAdapter = new RekapAbsensiAdapter(filteredList, this);
         rvRekap.setLayoutManager(new LinearLayoutManager(this));
-        rvRekap.setAdapter(new RekapAbsensiAdapter(filteredList, this));
+        rvRekap.setAdapter(rekapAbsensiAdapter);
+        rvRekap.post(new Runnable() {
+            @Override
+            public void run() {
+                rekapAbsensiAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }
