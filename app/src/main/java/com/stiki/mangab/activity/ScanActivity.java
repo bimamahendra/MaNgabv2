@@ -116,7 +116,6 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
     public void handleResult(Result result) {
         if (!isCaptured) {
             isCaptured = true;
-            Log.d("masukmhssatu", longitude + " - " + latitude);
             scanQrCode(result.getText(), latitude, longitude);
         }
     }
@@ -126,7 +125,6 @@ public class ScanActivity extends AppCompatActivity implements ZXingScannerView.
         public void gotLocation(Location location) {
             latitude = location.getLatitude();
             longitude = location.getLongitude();
-            Log.d("masukmhsdua", longitude + " - " + latitude);
         }
     };
 
