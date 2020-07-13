@@ -27,6 +27,7 @@ import com.stiki.mangab.api.ApiClient;
 import com.stiki.mangab.api.response.BaseResponse;
 import com.stiki.mangab.model.User;
 import com.stiki.mangab.preference.AppPreference;
+import com.stiki.mangab.preference.MyLocation;
 
 import java.net.UnknownHostException;
 
@@ -40,6 +41,8 @@ public class EnterCodeActivity extends AppCompatActivity {
 
     private Button btnSubmit;
     private EditText etCode1, etCode2, etCode3, etCode4, etCode5, etCode6;
+
+    MyLocation myLocation = new MyLocation();
 
     @SuppressLint("MissingPermission")
     @Override
@@ -151,53 +154,55 @@ public class EnterCodeActivity extends AppCompatActivity {
             }
         });
 
-        FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
-        mFusedLocation.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onSuccess(Location location) {
-                if(location != null) {
-                    btnSubmit.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            String code = etCode1.getText().toString()
-                                    + etCode2.getText().toString()
-                                    + etCode3.getText().toString()
-                                    + etCode4.getText().toString()
-                                    + etCode5.getText().toString()
-                                    + etCode6.getText().toString();
-
-                            double latitude = location.getLatitude();
-                            double longitude = location.getLongitude();
-                            api.absenMhs(code, user.noInduk, 1, latitude, longitude).enqueue(new Callback<BaseResponse>() {
-                                @Override
-                                public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                                    finish();
-                                    Intent intent = new Intent(getApplicationContext(), ScanResultActivity.class);
-                                    intent.putExtra("error", response.body().error);
-                                    intent.putExtra("message", response.body().message);
-                                    startActivity(intent);
-                                }
-
-                                @Override
-                                public void onFailure(Call<BaseResponse> call, Throwable t) {
-                                    if (t instanceof JsonSyntaxException) {
-                                        finish();
-                                        Intent intent = new Intent(getApplicationContext(), ScanResultActivity.class);
-                                        intent.putExtra("error", true);
-                                        intent.putExtra("message", "Invalid Code");
-                                        startActivity(intent);
-                                    } else if (t instanceof UnknownHostException) {
-                                        Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        t.printStackTrace();
-                                    }
-                                }
-                            });
-                        }
-                    });
-                }
+            public void onClick(View v) {
+                myLocation.getLocation(getApplicationContext(), locationResult);
             }
         });
 
+    }
+
+    MyLocation.LocationResult locationResult = new MyLocation.LocationResult() {
+        @Override
+        public void gotLocation(Location location) {
+            double longitude = location.getLongitude();
+            double latitude = location.getLatitude();
+            enterCode(latitude, longitude);
+        }
+    };
+    private void enterCode (double latitude, double longitude){
+        String code = etCode1.getText().toString()
+                + etCode2.getText().toString()
+                + etCode3.getText().toString()
+                + etCode4.getText().toString()
+                + etCode5.getText().toString()
+                + etCode6.getText().toString();
+
+        api.absenMhs(code, user.noInduk, 1, latitude, longitude).enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                finish();
+                Intent intent = new Intent(getApplicationContext(), ScanResultActivity.class);
+                intent.putExtra("error", response.body().error);
+                intent.putExtra("message", response.body().message);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                if (t instanceof JsonSyntaxException) {
+                    finish();
+                    Intent intent = new Intent(getApplicationContext(), ScanResultActivity.class);
+                    intent.putExtra("error", true);
+                    intent.putExtra("message", "Invalid Code");
+                    startActivity(intent);
+                } else if (t instanceof UnknownHostException) {
+                    Toast.makeText(getApplicationContext(), "No Internet Connection", Toast.LENGTH_SHORT).show();
+                } else {
+                    t.printStackTrace();
+                }
+            }
+        });
     }
 }

@@ -168,17 +168,6 @@ public class GenerateActivity extends AppCompatActivity implements View.OnClickL
             }
 
             myLocation.getLocation(getApplicationContext(), locationResult);
-            /*FusedLocationProviderClient mFusedLocation = LocationServices.getFusedLocationProviderClient(this);
-            mFusedLocation.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                @Override
-                public void onSuccess(Location location) {
-                    if (location != null){
-                        double latitude= location.getLatitude();
-                        double longitude = location.getLongitude();
-                        generateQrCode(latitude, longitude);
-                    }
-                }
-            });*/
 
 
         }
