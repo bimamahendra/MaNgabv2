@@ -210,20 +210,22 @@ public class SplashScreenActivity extends AppCompatActivity {
     }
 
     private String getDeviceId(){
-        TelephonyManager manager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        @SuppressLint("MissingPermission") String imei = manager.getDeviceId();
-        if (imei == null || imei.trim().length() == 0) {
-            imei = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-        }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            try {
-                imei = manager.getImei();
-            }catch (SecurityException e){
-                e.printStackTrace();
-            }
-        }
-        return imei;
+        return Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
+//        TelephonyManager manager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+//        @SuppressLint("MissingPermission") String imei = manager.getDeviceId();
+//        if (imei == null || imei.trim().length() == 0) {
+//            imei = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+//        }
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            try {
+//                imei = manager.getImei();
+//            }catch (SecurityException e){
+//                e.printStackTrace();
+//            }
+//        }
+//        return imei;
     }
 
     @Override
